@@ -22,17 +22,15 @@ const Game: React.FC = () => {
 		setHistory(nextHistory)
 		setCurrentMove(nextHistory.length - 1)
 		setXIsNext(!xIsNext)
-		addPlace(nextSquare, nextHistory[nextHistory.length - 2])
+		addPlace(nextSquare, nextHistory[nextHistory.length - 2], currentMove)
 	}
 	
-	const addPlace = (currentHistory: (null|string)[], prevHistory: (null|string)[]) => {
+	const addPlace = (currentHistory: (null|string)[], prevHistory: (null|string)[], currentMove: number) => {
 		const currentIndex = currentHistory.findIndex((value: null|string, index: number) => {
 			return prevHistory[index] !== value
 		})
 		if (currentIndex === -1) return
-		console.log(currentIndex + 1)
-		setPlace([...place, { row: Math.floor((currentIndex) / 3) + 1, col: (currentIndex) % 3 + 1}])
-		console.log(place)
+		setPlace([...place.slice(0, currentMove), { row: Math.floor((currentIndex) / 3) + 1, col: (currentIndex) % 3 + 1}])
 	}
 	
 	const jumpTo = (index: number) => {
@@ -49,9 +47,9 @@ const Game: React.FC = () => {
 			</li>
 		}
 		if (index > 0) {
-			description = 'Go to move #' + index + ` (${place[index].row}, ${place[index].col})`
+			description = `Go to move #${index} ` + (place[index] ? `(${place[index].row}, ${place[index].col})` : '')
 		} else {
-			description = 'Go to game start' + ` (${place[0].row}, ${place[0].col})`
+			description = 'Go to game start ' + (place[0] ? `(${place[0].row}, ${place[0].col})` : '')
 		}
 		
 		return <li key={description}>
